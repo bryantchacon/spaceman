@@ -11,12 +11,12 @@ public enum GameState //Clase tipo enum con los estados del juego, se usa como t
 
 public class GameManager : MonoBehaviour
 {
-	public GameState currentGameSate = GameState.menu; //Uso de la clase enum GameState en una variable
+	public GameState currentGameSate = GameState.menu; //Uso de la clase enum GameState en una variable y la variable que la contiene debe ser del mismo tipo de dato de enum, o sea, GameState
 	public static GameManager sharedInstance; //Instancia compartida; variable singleton(por static) que servira para crear una sola instancia del Game Manager. Otras maneras de usarlo son para el player controller o inventario o menu, si hubiera un solo jugador
 	private PlayerController controller; //Variable que servira para poder usar los metodos del PlayerController en este script
 	public int collectedObject = 0; //Valor por default al inicio de la partida
 
-	void Awake() //Se ejecuta antes de iniciar el juego, frame 0, o sea, se encarga de "despertar" primero todos los elementos del Game Manager, por lo general aqui se declaran las variables privadas
+	void Awake() //Se ejecuta antes de iniciar el juego, frame 0, o sea, se encarga de "despertar" primero todos los elementos que contenga, por lo general aqui se declaran las variables privadas
 	{
 		if(sharedInstance == null) //Si sharedInstance aun no tiene ningun valor(porque aun no se crea la instancia del Game Manager) se creara
 		{
@@ -26,19 +26,19 @@ public class GameManager : MonoBehaviour
 
 	void Start() //Se ejecuta al inicar el juego; 1er frame
 	{
-		controller = GameObject.Find("Player").GetComponent<PlayerController>(); //Indica que al iniciar el juego(por estar en Start()) la variable controller guardara el PlayerController del game object Player, al buscarlo por su nombre, y asi recuperarlo de el, o sea, el PlayerController del player se guardara en la variable controller
+		controller = GameObject.Find("Player").GetComponent<PlayerController>(); //Indica que al iniciar el juego(por estar en Start()) la variable controller guardara el PlayerController del game object Player, al buscarlo por su nombre, y asi recuperarlo de el, o sea, el PlayerController del player se guardara en esta variable
 	}
 
 	void Update() //Se ejecuta cada frame, si el codigo de aqui es muy pesado los frames caeran
 	{
 		/*
-		if(Input.GetKeyDown(KeyCode.S)) //Ejecutara el codigo si detecta la que la techa S fue presionada
+		if(Input.GetKeyDown(KeyCode.S)) //Ejecutara el codigo si detecta que la flecha S fue presionada
 		{
 			StartGame();
 		}
 		*/
 
-		if(Input.GetButtonDown("Submit") && currentGameSate != GameState.inGame) //Iniciar el juego al presionar enter(que es la tecla asignada en el submit de input manager) y el estado del juego es diferente de(!=) inGame. Hay dos Submit en el Input manager, para evitar errores los dos deben tener diferente Positive Button y ningun Alt Positive Button
+		if(Input.GetButtonDown("Submit") && currentGameSate != GameState.inGame) //Inicia el juego al presionar enter(que es la tecla asignada en el submit de input manager) y el estado del juego es diferente de(!=) inGame. Hay dos Submit en el Input manager, para evitar errores los dos deben tener diferente Positive Button y ningun Alt Positive Button
 		{
 			StartGame();
 		}
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 
 	private void SetGameState(GameState newGameState) //newGameState es una variable local de esta funcion, es su parametro, las variables que se vayan a usar en una funcion se indican entre sus () con todo y su tipo de dato
 	{
-		if(newGameState == GameState.menu)
+		if(newGameState == GameState.menu) //Si se esta en el menu...
 		{
 			MenuManager.sharedInstance.ShowMainMenu(); //Mostrar el menu principal
 		}
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 			LevelManager.sharedInstance.GenerateInitialLevelBlocks();
 			controller.StartGame(); //Accede al StartGame del PlayerController por medio de la variable controller porque esta lo guarda, indicado en el Start() de aqui
 
-			MainOrGameOverMenu();
+			MainOrGameOverMenu(); //Esta funcion se ejecuta aqui porque al entrar a "inGame" es porque se viene de "gameOver" o "menu"
 			MenuManager.sharedInstance.ShowGameUI(); //Mostrar la UI del juego
 		}
 		else if(newGameState == GameState.gameOver)
@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 		this.currentGameSate = newGameState; //Actualiza el estado actual del juego(currentGameSate, por eso se usa this., para enfatizar que es una variable del mismo Game Manager) al nuevo estado del juego(newGameState) para que continue
 	}
 
-	void MainOrGameOverMenu()
+	void MainOrGameOverMenu() //Se ejecuta al entrar a "inGame", lo cual se indica en setGameState
 	{
 		if(MenuManager.sharedInstance.mainMenuCanvas.enabled)
 		{

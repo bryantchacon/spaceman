@@ -12,13 +12,13 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
 
     Rigidbody2D rigidBody; //COMPONENTE Rigidbody2D DEL PLAYER, este componente es el que se rige por el motor de fisicas de Unity. Si no se escribe el nivel de visibilidad del codigo, lo interpretara como private, asi son Awake, Start y Update
     Animator animator; //COMPONENTE Animator DEL PLAYER
-    Vector3 startPosition; //Guardara la posicion iniciar del personaje al juego, para que al reiniciar siempre empiece en el mismo lugar. Es Vector3 porque aunque sea un juego 2D tambien tiene profundidad en Z, y para esto tambien se tiene que indicar
+    Vector3 startPosition; //Guardara la posicion inicial del personaje, para que al reiniciar siempre empiece en el mismo lugar. Es Vector3 porque aunque sea un juego 2D tambien tiene profundidad en Z
 
     const string STATE_ALIVE = "isAlive"; //CONSTANTE QUE HACE REFERENCIA AL PARAMETRO BOOL DEL Animator. Las variables constantes (const), nunca cambiaran en toda la ejecucion del codigo
     const string STATE_ON_THE_GROUND = "isOnTheGround";
 
     //VARIABLES DE VIDA Y MANA
-    [SerializeField] //Es para poder ver variable privadas en el editor
+    [SerializeField] //Es para poder ver variables privadas en el editor
     private int healthPoints, manaPoints; //Variables privadas de vida y mana
 
     public const int INITIAL_HEALTH = 100, INITIAL_MANA = 15, MAX_HEALTH = 200, MAX_MANA = 30, MIN_HEALTH = 10, MIN_MANA = 0; //Constantes de vida iniciales, maximas y minimas
@@ -38,15 +38,15 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
     }
 
     //2nd
-	void Start() //Se ejecuta al iniciar el juego; 1er frame, ya que antes Awake "desperto" todos los elementos
+	void Start() //Se ejecuta al iniciar el juego; 1er frame, ya que antes Awake "desperto" los elementos que contiene
     {
-        startPosition = this.transform.position; //Guarda la poscion del player al inicar el juego
+        startPosition = this.transform.position; //Guarda la poscion del player al inicar el juego, que se indica en el inspector
 	}
 
     public void StartGame() //Es publico para que se pueda acceder al el desde el Game Manager
     {
         //Estos dos SetBool(de STATE_ALIVE y STATE_ON_THE_GROUND) estan aqui por que si estuviesen en el Start de Unity provocarian un bug
-		animator.SetBool(STATE_ALIVE, true); //Al iniciar el juego setear el animator el booleano STATE_ALIVE a true
+		animator.SetBool(STATE_ALIVE, true); //Al iniciar el juego setear el animator del booleano STATE_ALIVE a true
 		animator.SetBool(STATE_ON_THE_GROUND, false); //Este inicia en false porque el personaje aparece en el aire, al tocar el piso el codigo lo pasara a true
 
         healthPoints = INITIAL_HEALTH; //Iniciar el juego con determinada vida
@@ -94,24 +94,22 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
     {
         //Walk();
 
-        if(GameManager.sharedInstance.currentGameSate == GameState.inGame) //Si el estado del juego es inGame se ejecutara el codigo, lo sera cuando se presione enter porque el juego inicia en Menu
+        if(GameManager.sharedInstance.currentGameSate == GameState.inGame) //Si el estado del juego es inGame se ejecutara el codigo; lo sera cuando se presione enter porque el juego inicia en Menu
         {
             if(rigidBody.velocity.x < walkSpeed) //FUNCION PARA CORRER AUTOMATICAMENTE. Si la velocidad en x es menor al valor de la variable walkSpeed, ejecutara el codigo
             {
-                rigidBody.velocity = new Vector2 //Velocidad del player (por rigidBody) es igual a nuevo Vector2 que sera el nuevo vector de velocidad, o sea, se crea el vector velocidad 2D
-                (walkSpeed, //Velocidad en x
-                rigidBody.velocity.y); //Velocidad en y
+                rigidBody.velocity = new Vector2(walkSpeed, rigidBody.velocity.y); //Velocidad del player (por velocity porque con rigidBody se indica el uso de las fisicas) es igual a nuevo Vector2 que sera el nuevo vector de velocidad
             }
         }
         else //Si no...
         {
-            rigidBody.velocity = new Vector2(0, rigidBody.velocity.y); //... se detendra el movimiento del personaje. Al iniciar el juego el player cae al piso, por eso 0 es para que no avance y para y normal porque su velocidad es por la fisica
+            rigidBody.velocity = new Vector2(0, rigidBody.velocity.y); //... se detendra el movimiento del personaje. Al iniciar el juego el player cae al piso, por eso 0 es para que no avance
         }
     }
 
     //Jump() esta en Update() para aligerar su carga, ya que ejecutara Jump() solo cuando la condicion del if() que la contiene se cumpla, y Walk() esta en FixedUpdate() para que su movimiento sea mas fluido, o sea, por la misma naturaleza de FixedUpdate()
 
-    //CAMINAR
+    //CAMINAR, por el momento no se esta usando
     void Walk()
     {
         if (IsTouchigTheGround())
@@ -135,7 +133,7 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
         float jumpForceFactor = jumpForce; //Variable local debido al super salto, pero aun asi sustituye a jumpForce en el salto normal porque la variable es local
 
         //Si se cumple este if es solo para restar mana y aumentar el valor del jumpForceFactor y el siguiente if es el que realiza el salto
-        if (superJump && manaPoints >= SUPER_JUMP_COST && IsTouchigTheGround()){ //Si superJump es true y los puntos de mana son mas o igual al costo del super salto y esta tocando el suelo...
+        if (superJump && manaPoints >= SUPER_JUMP_COST && IsTouchigTheGround()){ //Si superJump es true y los puntos de mana son mayor que o igual al costo del super salto y esta tocando el suelo...
             manaPoints -= SUPER_JUMP_COST; //... se resta el valor del super salto de los puntos de mana y...
             jumpForceFactor *= SUPER_JUMP_FORCE; //... el factor de fuerza de salto sera ahora el resultado de multiplicarse a si mismo por la fuerza del super salto
         }
@@ -147,7 +145,7 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
         }
     }
 
-    bool IsTouchigTheGround() //FUNCION PARA DETECTAR SI EL PLAYER ESTA O NO EN EL SUELO. Traza un rayo invisible para detectar el suelo, si lo detecta es verdadero y regresara true, si no false
+    bool IsTouchigTheGround() //FUNCION PARA DETECTAR SI EL PLAYER ESTA O NO EN EL SUELO. Traza un rayo invisible para detectar el suelo, si lo detecta es verdadero y regresara true, si no, false
     {
         if(Physics2D.Raycast //Si al trazar un rayo con el motor de fisicas 2D...
         (this.transform.position, //... desde el centro del mismo player...
@@ -175,7 +173,7 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
             PlayerPrefs.SetFloat("maxscore", travelledDistance); //... con SetFloat() asigna que el valor de la variable maxscore ahora sea el de travelledDistance(la distancia recorrida en la partida actual)
         }
 
-        this.animator.SetBool(STATE_ALIVE, false); //Hacer la animacion de muerte
+        this.animator.SetBool(STATE_ALIVE, false); //Reproducir la animacion de muerte
         GameManager.sharedInstance.GameOver(); //Indicar al Game Manager que es Game Over
     }
 
@@ -206,6 +204,6 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
     }
 
     public float GetTravelDistance(){ //Funcion para calcular la distancia recorrida
-        return this.transform.position.x - startPosition.x; //Regresa la posicion en la que esta el player, menos la posicion en la que empezo, ambos  en el eje x
+        return this.transform.position.x - startPosition.x; //Da la posicion hasta la que llega el player, menos la posicion en la que empezo, ambos  en el eje x
     }
 }

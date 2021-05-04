@@ -4,16 +4,6 @@ using UnityEngine;
 
 public class KillZone : MonoBehaviour
 {
-	void Start()
-	{
-		
-	}
-	
-	void Update()
-	{
-		
-	}
-
 	private void OnTriggerEnter2D(Collider2D collision) //Funcion que se activa al pasar por un trigger collider. La variable local Collider2D collision hace referencia al objeto que colisionara con el collider, o sea, el player, pero aun asi se comprueba checando su tag
 	{
 		if (collision.tag == "Player")

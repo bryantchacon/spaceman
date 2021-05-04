@@ -8,7 +8,8 @@ public enum CollectableType{
 	coin
 }
 
-public class Collectable : MonoBehaviour{
+public class Collectable : MonoBehaviour
+{
 	public CollectableType type = CollectableType.coin; //Valor por defecto de la variable
 
 	private SpriteRenderer sprite; //Referencia al sprite del collectable al que se asigne este script
@@ -18,7 +19,7 @@ public class Collectable : MonoBehaviour{
 
 	public int value = 1;
 
-	GameObject player; //Variable para usarse en la funcion Collect() en la recoleccion de vida y mana, pero primero, se localiza el Player en el Start()
+	GameObject player; //Variable para usarse en la funcion Collect() en la recoleccion de vida y mana, pero primero, se localiza el Player en el Start() de este script
 
 	private void Awake(){
 		sprite = GetComponent<SpriteRenderer>();

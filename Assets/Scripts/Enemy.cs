@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 	public float runningSpeed = 1.5f; //Velocidad del enemigo
-	Rigidbody2D rigidBody; //variable para recuperar el rigidbody del enemigo
-	public bool facingRight = false; //Variable que indica la direccion en la que ve el enemigo al iniciar el juego, false es que no esta activado en el editor
+	Rigidbody2D rigidBody; //Variable para recuperar el rigidbody del enemigo, no es publica porque este script esta en el enemigo
+	public bool facingRight = false; //Variable que indica la direccion en la que ve el enemigo al iniciar el juego, se activa o desactiva en el editor
 	private Vector3 startPosition; //Variable donde se almacenara la posicion del enemigo
 	public int enemyDamage = 10; //Daño del enemigo, cuando la variable se use se debe poner el signo de menos para que la cantidad se reste
 
@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour {
 
 		if (facingRight){ //Si facingRight es true...
 			currentRunningSpeed = runningSpeed; //... se indica con la velocidad que la direccion en la que ira el enemigo es positiva(hacia la derecha)...
-			this.transform.eulerAngles = new Vector3(0, 180, 0); //... y que el enemigo girara 180° para mirar a la derecha
+			this.transform.eulerAngles = new Vector3(0, 180, 0); //... y el enemigo girara 180° para mirar a la derecha
 		}
 		else{ //Si no, si facingRight es false...
 			currentRunningSpeed = -runningSpeed; //... la direccion en la que ira el enemigo es negativa(hacia la izquierda)...
@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision){ //La funcion se llama cuando el enemigo colisiona con otra cosa, la variable collision en el parametro se refiere al game object contra el que chocara el enemigo
-		if (collision.tag == "Coin"){ //Si el game object contra el que choca tiene la etiqueta tag...
+		if (collision.tag == "Coin"){ //Si el game object contra el que choca tiene el tag coin...
 			return; //... no hara nada
 		}
 		else if (collision.tag == "Player"){ //Si la etiqueta es Player...
