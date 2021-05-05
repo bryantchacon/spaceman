@@ -61,14 +61,4 @@ public class MenuManager : MonoBehaviour
 			Application.Quit(); //... saldra del juego usando este codigo
 		#endif
 	}
-
-	void Start()
-	{
-		
-	}
-	
-	void Update()
-	{
-		
-	}
 }

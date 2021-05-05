@@ -14,6 +14,7 @@ public class PlayerBar : MonoBehaviour {
 
 	void Start () {
 		slider = GetComponent<Slider>(); //Obtiene el componente Slider de la variable slider
+
 		switch (type){ //Dependiendo del tipo de barra que se elija en el editor...
 			case BarType.healthBar:
 				slider.value = PlayerController.INITIAL_HEALTH; //... al iniciar el juego el valor de la barra se asigna por medio de la constante INITIAL_HEALTH del PlayerController. .value es una funcion de Slider, el tipo de dato de slider
