@@ -21,27 +21,32 @@ public class Collectable : MonoBehaviour
 
 	GameObject player; //Variable para usarse en la funcion Collect() en la recoleccion de vida y mana, pero primero, se localiza el Player en el Start() de este script
 
-	private void Awake(){
+	private void Awake()
+	{
 		sprite = GetComponent<SpriteRenderer>();
 		itemCollider = GetComponent<CircleCollider2D>();
 	}
 	
-	private void Start(){
+	private void Start()
+	{
 		player = GameObject.Find("Player"); //Se obtiene el player por medio de su etiqueta, esto cuando un game object no es un singleton, o sea, un shared instance
 	}
 
-	void Show(){
+	void Show()
+	{
 		sprite.enabled = true;
 		itemCollider.enabled = true;
 		hasBeenCollected = false;
 	}
 
-	void Hide(){
+	void Hide()
+	{
 		sprite.enabled = false;
 		itemCollider.enabled = false;
 	}
 
-	void Collect(){ //Funcion que indicara que hacer al recolectar un item, dependiendo del tipo que sea, esto dependera del tipo de item al que se agregue ESTE SCRIPT ya que se selecciona en la variable Collectable Type desde el editor
+	void Collect() //Funcion que indicara que hacer al recolectar un item, dependiendo del tipo que sea, esto dependera del tipo de item al que se agregue ESTE SCRIPT ya que se selecciona en la variable Collectable Type desde el editor
+	{
 		Hide();
 		hasBeenCollected = true;
 
@@ -59,7 +64,8 @@ public class Collectable : MonoBehaviour
 		}
 	}
 
-	void OnTriggerEnter2D(Collider2D collision){
+	void OnTriggerEnter2D(Collider2D collision)
+	{
 		if (collision.tag == "Player"){
 			Collect(); //Ejecucion de la funcion Collect()
 

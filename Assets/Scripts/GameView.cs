@@ -9,11 +9,13 @@ public class GameView : MonoBehaviour
 
 	private PlayerController controller; //Variable controller para acceder a los metodos del PlayerController, y no estar preguntando por ellos todo el tiempo si el codigo que los pedira estara en el Update(), pero antes de esto, el componente que se guardara en la variable se pide en el Start()
 
-	void Start(){
+	void Start()
+	{
 		controller = GameObject.Find("Player").GetComponent<PlayerController>(); //Se asigna que el valor de controller sera la obtencion del PlayerController del Player al encontrarlo, para esto, controller(la variable donde se guarda) es de tipo de dato PlayerController
 	}
 	
-	void Update(){
+	void Update()
+	{
 		if(GameManager.sharedInstance.currentGameSate == GameState.inGame) //Si se esta jugando...
 		{
 			int coins = GameManager.sharedInstance.collectedObject; //Actualizara en la UI el numero de monedas que se vayan recolectando y su valor lo obtiene del Game Manager

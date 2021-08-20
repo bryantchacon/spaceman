@@ -56,9 +56,9 @@ public class MenuManager : MonoBehaviour
 	public void ExitGame() //Salir del juego
 	{
 		#if UNITY_EDITOR //Si esta en el editor de Unity...
-			UnityEditor.EditorApplication.isPlaying = false; //... saldra del juego, es lo mismo que detener el juego desde el editor con el boton play
+			UnityEditor.EditorApplication.isPlaying = false; //... saldra del juego(es lo mismo que detener el juego desde el editor con el boton play)
 		#else //Si no, si esta en cualquier otra plataforma...
-			Application.Quit(); //... saldra del juego usando este codigo
+			Application.Quit(); //... saldra del juego
 		#endif
 	}
 }

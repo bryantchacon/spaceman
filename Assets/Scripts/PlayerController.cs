@@ -18,8 +18,7 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
     const string STATE_ON_THE_GROUND = "isOnTheGround";
 
     //VARIABLES DE VIDA Y MANA
-    [SerializeField] //Es para poder ver variables privadas en el editor
-    private int healthPoints, manaPoints; //Variables privadas de vida y mana
+    [SerializeField] private int healthPoints, manaPoints; //Variables privadas de vida y mana, [SerializeField] es para poder ver variables privadas en el editor
 
     public const int INITIAL_HEALTH = 100, INITIAL_MANA = 15, MAX_HEALTH = 200, MAX_MANA = 30, MIN_HEALTH = 10, MIN_MANA = 0; //Constantes de vida iniciales, maximas y minimas
 
@@ -147,11 +146,7 @@ public class PlayerController : MonoBehaviour //: indica que hereda de la clase 
 
     bool IsTouchigTheGround() //FUNCION PARA DETECTAR SI EL PLAYER ESTA O NO EN EL SUELO. Traza un rayo invisible para detectar el suelo, si lo detecta es verdadero y regresara true, si no, false
     {
-        if(Physics2D.Raycast //Si al trazar un rayo con el motor de fisicas 2D...
-        (this.transform.position, //... desde el centro del mismo player...
-        Vector2.down, //... hacia abajo...
-        raycastLongitude, //... de longitud tal...
-        groundMask)) //... detecta el suelo...
+        if(Physics2D.Raycast(this.transform.position, Vector2.down, raycastLongitude, groundMask)) //Si al trazar un rayo con el motor de fisicas 2D, desde el player, hacia abajo, de longitud tal, detecta el suelo...
         {
             //animator.enabled = true; //Habilitar la animacion al estar en el suelo
             //GameManager.sharedInstance.currentGameSate = GameState.inGame; //Indica que el estado del juego es inGame cuando personaje toca el piso por primera vez; se hace accediendo al currentGameSate por medio del GameManager y luego su instancia el sharedInstance, y con GameState.(que es el tipo de dato de currentGameState) se indica el estado del juego
