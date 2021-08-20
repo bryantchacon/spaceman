@@ -1,4 +1,4 @@
-# SpaceMan
+# Spaceman
 
 ![SpaceMan](https://static.platzi.com/media/landing-projects/imagen-proyecto-C-SHARP.png)
 
